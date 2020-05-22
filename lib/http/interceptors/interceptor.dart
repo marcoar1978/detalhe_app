@@ -1,11 +1,20 @@
 
 
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:http_interceptor/http_interceptor.dart';
+import 'package:detalhe_app1/bloc/LoginBloc.dart';
+
 
 class Interceptor implements InterceptorContract{
+
   @override
   Future<RequestData> interceptRequest({RequestData data}) async {
-    // TODO: implement interceptRequest
+    try {
+      data.headers["Content-Type"] = "application/json";
+      data.headers["Authorization"] = "Bearer ${BlocProvider.getBloc<LoginBloc>().token.value}";
+    } catch (e) {
+      print(e);
+    }
     return data;
   }
 
