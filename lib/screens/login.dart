@@ -11,7 +11,7 @@ class Login extends StatelessWidget {
   final bloc = BlocProvider.getBloc<LoginBloc>();
 
   Login(){
-    BlocProvider.getBloc<DadosIniciaisBloc>().carregamentoDados.sink.add(0);
+
     BlocProvider.getBloc<DadosIniciaisBloc>().dadosSubject.add(DadosIniciais('',''));
   }
 
@@ -70,6 +70,7 @@ class Login extends StatelessWidget {
                 child: Text('Login'),
                 onPressed: () async {
                   if (bloc.formKey.currentState.validate()) {
+                    BlocProvider.getBloc<DadosIniciaisBloc>().carregamentoDados.sink.add(0);
                     await bloc.logar(context);
                   }
                 },
