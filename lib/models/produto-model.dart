@@ -9,7 +9,7 @@ class Produto {
 
   @override
   String toString() {
-    return 'Produto{produtoId: $produtoId, nome: $nome, valor: $valor}';
+    return 'Produto{produtoId: $produtoId, nome: $nome, valor: $valor, listaId: $listaId}';
   }
 
   Produto.fromMap(Map<String, dynamic> produtoMap)

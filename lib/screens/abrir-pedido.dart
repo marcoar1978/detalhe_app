@@ -37,6 +37,7 @@ class _AbrirPedidoState extends State<AbrirPedido> {
           Future.delayed(Duration(milliseconds: 500));
           this.blocAbrirPedido.selectDentista = null;
           this.blocAbrirPedido.selDentista(c.id);
+          this.blocAbrirPedido.selProdutosPorClinica(c.listaId);
           setState(() {
             this.blocAbrirPedido.selectClinica = c;
             blocAbrirPedido.visibleSelDentista = true;
@@ -52,11 +53,11 @@ class _AbrirPedidoState extends State<AbrirPedido> {
     );
   }
 
-  Widget _selDentista(BuildContext context){
+  Widget _selDentista(BuildContext context) {
     return StreamBuilder(
       stream: this.blocAbrirPedido.dentistaPorClinicaSubject.stream,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
           List<Dentista> dentistas = snapshot.data;
           return AnimatedOpacity(
             opacity: blocAbrirPedido.visibleSelDentista ? 1.0 : 0.0,
@@ -66,33 +67,49 @@ class _AbrirPedidoState extends State<AbrirPedido> {
               child: DropdownButtonFormField<Dentista>(
                 hint: Text('Selecione o dentista'),
                 value: this.blocAbrirPedido.selectDentista,
-                items: dentistas.map((Dentista d){
+                items: dentistas.map((Dentista d) {
                   return DropdownMenuItem<Dentista>(
                     value: d,
                     child: Text(d.nome),
                   );
                 }).toList(),
-                onChanged: (d){
+                onChanged: (d) {
                   setState(() {
                     this.blocAbrirPedido.selectDentista = d;
                   });
                 },
-                validator: (value){
-                  if(value == null){
+                validator: (value) {
+                  if (value == null) {
                     return 'Escolha o dentista';
                   }
                   return '';
                 },
-
               ),
             ),
           );
         }
         return Text('');
       },
-
     );
+  }
 
+  Widget _popupProdutos(BuildContext context) {
+    return AlertDialog(
+      title: Text('Produtos'),
+      content: Container(
+        child: ListView(
+          children: <Widget>[Text('Escolha de produtos')],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Fechar'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
   }
 
   @override
@@ -111,7 +128,17 @@ class _AbrirPedidoState extends State<AbrirPedido> {
               height: 16,
             ),
             this._selClinica(context),
-            this._selDentista(context)
+            this._selDentista(context),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return this._popupProdutos(context);
+                    });
+              },
+            )
           ],
         ),
       ),

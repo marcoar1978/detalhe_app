@@ -69,6 +69,7 @@ class Login extends StatelessWidget {
                 textColor: Colors.white,
                 child: Text('Login'),
                 onPressed: () async {
+                  FocusScope.of(context).requestFocus(new FocusNode());
                   if (bloc.formKey.currentState.validate()) {
                     BlocProvider.getBloc<DadosIniciaisBloc>().carregamentoDados.sink.add(0);
                     await bloc.logar(context);
